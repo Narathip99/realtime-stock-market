@@ -19,12 +19,44 @@ def sell_stock(users, stocks, user, stock, quantity):
     profit = stocks[stock] * quantity
     users[user]["balance"] += profit
     users[user]["stocks"][stock] -= quantity
+    if users[user]["stocks"][stock] == 0:
+        del users[user]["stocks"][stock]
     return f"order: sell {quantity} {stock} at {stocks[stock]:.2f} bath"
 
 # calculate profit/loss
 def calculate_profit_loss(users, stocks, user):
-    initial_balance = 1000 if user == "user1" else 2000
     current_balance = users[user]["balance"]
+    stock_value = 0
     for stock, quantity in users[user]["stocks"].items():
-        current_balance += stocks[stock] * quantity
-    return current_balance - initial_balance
+        stock_value += stocks[stock] * quantity
+    # เพิ่มมูลค่าหุ้นที่มีอยู่ลงในยอดปัจจุบัน
+    total_value = current_balance + stock_value
+    return total_value - (1000 if user == "user1" else 2000)
+
+# set take profit
+def set_take_profit(users, user, profit):
+    users[user]["take_profit"] = profit
+    return f"Take profit set to {profit} for {user}"
+
+# set stop loss
+def set_stop_loss(users, user, loss):
+    users[user]["stop_loss"] = loss
+    return f"Stop loss set to {loss} for {user}"
+
+# check and execute take profit or stop loss
+def check_take_profit_stop_loss(users, stocks):
+    for user in users:
+        profit_loss = calculate_profit_loss(users, stocks, user)
+        if users[user]["take_profit"] > 0 and profit_loss >= users[user]["take_profit"]:
+            sell_all_stocks(users, stocks, user)
+            print(f"Take profit executed for {user}. All stocks sold.")
+            users[user]["take_profit"] = 0
+        elif users[user]["stop_loss"] < 0 and profit_loss <= users[user]["stop_loss"]:
+            sell_all_stocks(users, stocks, user)
+            print(f"Stop loss executed for {user}. All stocks sold.")
+            users[user]["stop_loss"] = 0
+
+# sell all stocks for a user
+def sell_all_stocks(users, stocks, user):
+    for stock, quantity in list(users[user]["stocks"].items()):
+        sell_stock(users, stocks, user, stock, quantity)
