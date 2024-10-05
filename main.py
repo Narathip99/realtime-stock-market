@@ -32,7 +32,7 @@ def display_info():
         if profit_loss < -100:
             print(f"notice: {user} has reached the Stop Loss!!!")
 
-# ลูปหลักของโปรแกรม
+# Program loop
 while True:
     display_info()
     
