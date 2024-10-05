@@ -42,6 +42,7 @@ def set_stop_loss(users, user, loss):
     users[user]["stop_loss"] = loss
     return f"Stop loss set to {loss} for {user}"
 
+
 # check and execute take profit or stop loss
 def check_take_profit_stop_loss(users, stocks):
     for user in users:
