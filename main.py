@@ -37,8 +37,10 @@ def display_info():
 while True:
     display_info()
     check_take_profit_stop_loss(users, stocks)
+    
     print("------------------------------")
     print("commands: buy | sell | refresh | take profit | stop loss | quit")
+    
     action = input("Input: ").lower()
     if action == "quit" or action == "q":
         break

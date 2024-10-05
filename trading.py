@@ -16,8 +16,8 @@ def sell_stock(users, stocks, user, stock, quantity):
     if stock not in users[user]["stocks"] or users[user]["stocks"][stock] < quantity:
         return "stock is not enough"
     
-    profit = stocks[stock] * quantity
-    users[user]["balance"] += profit
+    monney = stocks[stock] * quantity
+    users[user]["balance"] += monney
     users[user]["stocks"][stock] -= quantity
     if users[user]["stocks"][stock] == 0:
         del users[user]["stocks"][stock]
@@ -29,7 +29,6 @@ def calculate_profit_loss(users, stocks, user):
     stock_value = 0
     for stock, quantity in users[user]["stocks"].items():
         stock_value += stocks[stock] * quantity
-    # เพิ่มมูลค่าหุ้นที่มีอยู่ลงในยอดปัจจุบัน
     total_value = current_balance + stock_value
     return total_value - (1000 if user == "user1" else 2000)
 
